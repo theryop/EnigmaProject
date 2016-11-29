@@ -1,0 +1,38 @@
+Components:
+Plugboard (10 connections switching 2 different letters each)
+3 rotors (monoalphabetic cipher?) out of 5 different combinations, set in a specific position.
+
+Flow:
+Input
+Plugboard
+Rotor 1
+Rotor 2
+Rotor 3
+Rotor 3
+Rotor 2
+Rotor 1
+Plugboard
+Output
+
+Assumtions:
+The only inputs to the code are messages with no spaces, with each character being 1 of 26 uppercase roman alphabet characters.
+For the intial recreation, because the original machine was mechanical, we can assume that both the rotors and the plugboards are formatted 
+correctly.
+
+Rotor mechanism:
+Before each input, rotor 1 changes by 1 "rotation". 
+After 26 rotations by rotor 1, rotor 2 changes by 1, and after 26 rotations of rotor 2, rotor 3 changes by 1.
+
+Expected output: 
+Given plaintext, should produce polyalphabetic encryption. 
+Given encrypted text, the choice of rotors, and their positions, should give the associated plaintext.
+
+C++ notes:
+Intially creating the plugboard as a Map to associate 2 different characters. 
+Each rotor should be a vector of integers, representing a monoalphabetic cipher.
+Plugboard information will be stored in a txt file to be read as the program begins. 
+Txt file will contain 2 lines of 10 characters each, associating each character with the other character in its same column. 
+associated pairs cannot contain two of the same letter, nor can one letter be in both rows.
+Each rotor will also be stored in txt files. rotors will be chosen by user after starting program. 
+Input will be placed into a vector, and will be outputted from the same vector.
+expected Ascii values - 101 to 132
