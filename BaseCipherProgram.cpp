@@ -88,7 +88,7 @@ int main()
 	}
 	else
 	{
-		std::cout << "Rotor " << rotorchoice << " chosen as first rotor.\n";
+		std::cout << "rotor/Rotor " << rotorchoice << " chosen as first rotor.\n";
 		getline(fRotorStream, rotordata);
 		for(int i = 0;i < rotordata.length();i++)
 		{
@@ -108,7 +108,7 @@ int main()
 	std::cout << "Which rotor would you like to be the second rotor?\n";
 	std::cin >> rotorchoice;
 	std::ifstream sRotorStream;
-	sRotorStream.open ("Rotor" + rotorchoice + ".txt", std::ifstream::in);
+	sRotorStream.open ("rotor/Rotor" + rotorchoice + ".txt", std::ifstream::in);
     if (!sRotorStream.is_open()) // error checking for a plugboard file
 	{
 		std::cerr <<"rotor file not found";
@@ -136,7 +136,7 @@ int main()
 	std::cout << "Which rotor would you like to be the third rotor?\n";
 	std::cin >> rotorchoice;
 	std::ifstream tRotorStream;
-	tRotorStream.open ("Rotor" + rotorchoice + ".txt", std::ifstream::in);
+	tRotorStream.open ("rotor/Rotor" + rotorchoice + ".txt", std::ifstream::in);
     if (!tRotorStream.is_open()) 
 	{
 		std::cerr <<"rotor file not found";
@@ -163,6 +163,15 @@ int main()
 	std::string useri;
 	std::cout << "Please enter the string you'd like to input:\n";
 	std::cin >> useri; // We are assuming, in this base program, that the user's input is properly formatted with only Upper Case Roman alphabetical letters.
+    
+    for(int i = 0; i < useri.size(); i++)
+    {
+        if(useri[i] < 65 || useri[i] > 90)
+        {
+            std::cerr << "Invalid input string\n";
+            exit(1);
+        }
+    }
 	
 	//Part 3: Userinput is taken in, converted into a vector of characters, then converted into an output;
 	std::vector <char> userInVec;
@@ -231,5 +240,6 @@ int main()
 	{
 		std::cout <<userInVec.at(i);
 	}
+    std::cout << "\n";
 	return 0;
 }
