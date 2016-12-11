@@ -275,7 +275,7 @@ int main()
     for (int i= 0; i < userInVec.size(); i++)
     {
         int tempval = +userInVec.at(i);
-        if (+pv3.at(tempval) != '0')
+        if (pv3.at(tempval) != -1)
         {
             userInVec.at(i) = pv3.at(tempval);
         }
@@ -284,7 +284,7 @@ int main()
     std::cout << "The resultant output is:\n";
     for (int i = 0; i < userInVec.size();i++)
     {
-        std::cout <<userInVec.at(i);
+      std::cout << userInVec.at(i);
     }
     std::cout << "\n";
     return 0;
