@@ -6,13 +6,13 @@
 
 std::vector<char> rotate(int amt, std::vector<char> initial);
 
-std:: vector<char> rotate(int amt, std::vector<char> initial)
+std::vector<char> rotate(int amt, std::vector<char> initial)
 {
     int counter = 0;
     char temp;
     while (counter < amt)
     {
-        temp = initial.at(25);
+        temp = initial.at(127);
         initial.pop_back();
         initial.insert(initial.begin(),temp);
         counter++;
@@ -41,38 +41,33 @@ int main()
         getline(plugboard, pb2);
         for(int i = 0;i < pb1.length(); i++)
         {
-            if (+pb1.at(i) != 32) // if current plugboard character is not a space, add char to vector.
-            {
-                pv1.push_back(pb1.at(i));
-            }
+	  pv1.push_back(pb1.at(i));
         }
         for (int i = 0;i < pb2.length(); i++)
         {
-            if (+pb2.at(i) != 32)
-            {
-                pv2.push_back(pb2.at(i));
-            }
+	  pv2.push_back(pb2.at(i));
         }
-        pv3.assign(26, '0');
+        pv3.assign(128, '0');
         for (int i = 0;i < pv1.size(); i++) //adds the connection of both plugboard ends to the map.
         {
             char code1 = pv1.at(i);
-            int icode1 = +code1 - 65;
+            int icode1 = code1;
             char code2 = pv2.at(i);
-            int icode2 = +code2 - 65;
+            int icode2 = code2;
             
             pv3.at(icode1) = code2;
             pv3.at(icode2) = code1;
             
             
         }
+	
         std::cout << "plugboard loaded successfully.\n";
     }
     plugboard.close();
     
     //Part 2: This segment accesses the rotors, and places them into their respective vectors.
     std::string rotorchoice;
-    std::string rotordata;
+    char c;
     int rotorPosition;
     std::vector <char> rotor1;
     std::vector <char> rotor2;
@@ -89,13 +84,10 @@ int main()
     else
     {
         std::cout << "Rotor " << rotorchoice << " chosen as first rotor.\n";
-        getline(fRotorStream, rotordata);
-        for(int i = 0;i < rotordata.length();i++)
+        while(fRotorStream.get(c))
         {
-            if (rotordata.at(i) != ' ')
-            {
-                rotor1.push_back(rotordata.at(i));
-            }
+	  rotor1.push_back(c);
+
         }
     }
     fRotorStream.close();
@@ -117,13 +109,9 @@ int main()
     else
     {
         std::cout << "Rotor " << rotorchoice << " chosen as second rotor.\n";
-        getline(sRotorStream, rotordata);
-        for(int i = 0;i < rotordata.length();i++)
+        while(sRotorStream.get(c))
         {
-            if (rotordata.at(i) != ' ')
-            {
-                rotor2.push_back(rotordata.at(i));
-            }
+	  rotor2.push_back(c);
         }
     }
     sRotorStream.close();
@@ -145,14 +133,10 @@ int main()
     else
     {
         std::cout << "Rotor " << rotorchoice << " chosen as third rotor.\n";
-        getline(tRotorStream, rotordata);
-        for(int i = 0;i < rotordata.length();i++)
+        while(tRotorStream.get(c))
         {
-            if (rotordata.at(i) != ' ')
-            {
-                rotor3.push_back(rotordata.at(i));
-            }
-        }
+	  rotor3.push_back(c);
+	}
     }
     tRotorStream.close();
     std::cout << "what position would you like to set the third rotor at?\n";
@@ -174,10 +158,9 @@ int main()
     else
     {
         std::string rf1;
-        getline(refStream, rf1);
-        for (int i = 0;i < rf1.size();i++)
+	while(refStream.get(c))
         {
-            Reflector.push_back(rf1.at(i));
+	  Reflector.push_back(c);
         }
     }
     refStream.close();
@@ -187,17 +170,17 @@ int main()
     std::cin.ignore();
     getline(std::cin, useri); // We are assuming, in this base program, that the user's input is properly formatted with only Upper Case Roman alphabetical letters.
     
-    for(int i = 0; i < useri.size(); i++)
-    {
-        if((useri[i] < 65 || useri[i] > 90) && useri[i] != ' ')
-        {
-            std::cerr << "Invalid input string\n";
-            exit(1);
-        }
-    }
+    // for(int i = 0; i < useri.size(); i++)
+    // {
+    //     if((useri[i] < 65 || useri[i] > 90) && useri[i] != ' ')
+    //     {
+    //         std::cerr << "Invalid input string\n";
+    //         exit(1);b
+    //     }
+    // }
     
     //Part 3: Userinput is taken in, converted into a vector of characters, then converted into an output;
-    std::vector <char> userInVec;
+    std::vector<char> userInVec;
     
     for (int i = 0; i < useri.length();i++) //converts user input into a vector of characters, for ease of replacement.
     {
@@ -208,12 +191,8 @@ int main()
     
     for (int i= 0; i < userInVec.size(); i++)
     {
-        int tempval = +userInVec.at(i) - 65;
-        if (userInVec.at(i) == ' ')
-        {
-            
-        }
-        else if (+pv3[tempval] != 48) // if the character isn't a 0, replace the input with the pb character
+        int tempval = userInVec.at(i);
+        if (+pv3[tempval] != 48) // if the character isn't a 0, replace the input with the pb character
         {
             userInVec.at(i) = pv3.at(tempval);
         }
@@ -224,77 +203,71 @@ int main()
     int r2counter = 1;
     for (int i = 0; i < userInVec.size(); i++)
     {
-        if (userInVec.at(i) != ' ')
-        {
-            int icharval = +userInVec.at(i) - 'A';
-            rotorcounter++;
-            
-            if (r2counter % 26 == 0)
-            {
-                rotor3 = rotate(1,rotor3);
-                rotor2 = rotate(1,rotor2);
+      int icharval = userInVec.at(i);
+      std::cout << userInVec.at(i) << " ";
+      rotorcounter++;
+      
+      if (r2counter % 128 == 0)
+	{
+	  rotor3 = rotate(1,rotor3);
+	  rotor2 = rotate(1,rotor2);
                 r2counter++;
-            }
-            else if (rotorcounter % 26 == 0)
-            {
-                rotor2 = rotate(1,rotor2);
+	}
+      else if (rotorcounter % 128 == 0)
+	{
+	  rotor2 = rotate(1,rotor2);
                 r2counter++;
-            }
-            rotor1 = rotate(1,rotor1);
+	}
+      rotor1 = rotate(1,rotor1);
+      userInVec.at(i) = rotor1.at(icharval);
+      
+      icharval = userInVec.at(i);
+      userInVec.at(i) = rotor2.at(icharval);
+      
+      icharval = userInVec.at(i);
+      userInVec.at(i) = rotor3.at(icharval);
+      
+      icharval = userInVec.at(i);
+      userInVec.at(i) = Reflector.at(icharval);   //Reflector character
             
-            userInVec.at(i) = rotor1.at(icharval);
-            
-            icharval = +userInVec.at(i) - 'A';
-            userInVec.at(i) = rotor2.at(icharval);
-            
-            icharval = +userInVec.at(i) - 'A';
-            userInVec.at(i) = rotor3.at(icharval);
-            
-            icharval = +userInVec.at(i) - 'A';
-            userInVec.at(i) = Reflector.at(icharval);   //Reflector character
-            
-            char revRotorChar;
-            for (int j = 0; j < rotor3.size(); j++)
-            {
-                if (userInVec.at(i) == rotor3.at(j))
-                {
-                    revRotorChar = j + 'A';
+      char revRotorChar;
+      for (int j = 0; j < rotor3.size(); j++)
+	{
+	  if (userInVec.at(i) == rotor3.at(j))
+	    {
+	      revRotorChar = j;
+	      break;
+	    }
+	}
+      userInVec.at(i) = revRotorChar;
+      
+      for (int j = 0; j < rotor2.size(); j++)
+	{
+	  if (userInVec.at(i) == rotor2.at(j))
+	    {
+	      revRotorChar = j;
+	      break;
+	    }
+	}
+      userInVec.at(i) = revRotorChar;
+      
+      for (int j = 0; j < rotor1.size(); j++)
+	{
+	  if (userInVec.at(i) == rotor1.at(j))
+	    {
+	      revRotorChar = j;
                     break;
-                }
-            }
-            userInVec.at(i) = revRotorChar;
-            
-            for (int j = 0; j < rotor2.size(); j++)
-            {
-                if (userInVec.at(i) == rotor2.at(j))
-                {
-                    revRotorChar = j + 'A';
-                    break;
-                }
-            }
-            userInVec.at(i) = revRotorChar;
-            
-            for (int j = 0; j < rotor1.size(); j++)
-            {
-                if (userInVec.at(i) == rotor1.at(j))
-                {
-                    revRotorChar = j + 'A';
-                    break;
-                }
-            }
-            
-            userInVec.at(i) = revRotorChar;
-        }
+	    }
+	}
+      
+      userInVec.at(i) = revRotorChar;
     }
     
     //2nd Plugboard switch
     for (int i= 0; i < userInVec.size(); i++)
     {
-        int tempval = +userInVec.at(i) - 'A';
-        if (userInVec.at(i) == ' ')
-        {
-        }
-        else if (+pv3.at(tempval) != '0')
+        int tempval = +userInVec.at(i);
+        if (+pv3.at(tempval) != '0')
         {
             userInVec.at(i) = pv3.at(tempval);
         }
