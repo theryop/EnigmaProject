@@ -47,7 +47,7 @@ int main()
         {
 	  pv2.push_back(pb2.at(i));
         }
-        pv3.assign(128, '0');
+        pv3.assign(128, -1);
         for (int i = 0;i < pv1.size(); i++) //adds the connection of both plugboard ends to the map.
         {
             char code1 = pv1.at(i);
@@ -66,8 +66,8 @@ int main()
     plugboard.close();
     
     //Part 2: This segment accesses the rotors, and places them into their respective vectors.
-    std::string rotorchoice;
     char c;
+    std::string rotorchoice;
     int rotorPosition;
     std::vector <char> rotor1;
     std::vector <char> rotor2;
@@ -86,17 +86,21 @@ int main()
         std::cout << "Rotor " << rotorchoice << " chosen as first rotor.\n";
         while(fRotorStream.get(c))
         {
-	  rotor1.push_back(c);
+	  rotor1.push_back(c); //push in all chars in the file
 
         }
     }
     fRotorStream.close();
     
+    if(rotor1.size() == 129)
+      {
+	rotor1.pop_back(); //takes care of extra newline at the end of the file}
+      }
+    
     std::cout << "what position would you like to set the first rotor at?\n";
     std::cin >> rotorPosition;
     rotor1 = rotate(rotorPosition, rotor1);
     std::cout << "The first rotor has been set to initial position " << rotorPosition << "\n";
-    
     std::cout << "Which rotor would you like to be the second rotor?\n";
     std::cin >> rotorchoice;
     std::ifstream sRotorStream;
@@ -111,11 +115,18 @@ int main()
         std::cout << "Rotor " << rotorchoice << " chosen as second rotor.\n";
         while(sRotorStream.get(c))
         {
-	  rotor2.push_back(c);
+	  rotor2.push_back(c); //push in all chars in the file
         }
     }
     sRotorStream.close();
-    rotorPosition = 0;
+    
+    rotorPosition = 0; //reset the rotor position
+    
+    if(rotor2.size() == 129)
+      {
+	rotor2.pop_back(); //takes care of extra newline at the end of the file}
+      }
+    
     std::cout << "what position would you like to set the second rotor at?\n";
     std::cin >> rotorPosition;
     rotor2 = rotate(rotorPosition, rotor2);
@@ -135,10 +146,18 @@ int main()
         std::cout << "Rotor " << rotorchoice << " chosen as third rotor.\n";
         while(tRotorStream.get(c))
         {
-	  rotor3.push_back(c);
+	  rotor3.push_back(c); //push in all the characters in the file
 	}
     }
     tRotorStream.close();
+
+    rotorPosition = 0; //reset the rotor position
+    
+    if(rotor3.size() == 129)
+      {
+	rotor3.pop_back(); //takes care of extra newline at the end of the file}
+      }
+    
     std::cout << "what position would you like to set the third rotor at?\n";
     std::cin >> rotorPosition;
     rotor3 = rotate(rotorPosition, rotor3);
@@ -168,16 +187,7 @@ int main()
     std::string useri;
     std::cout << "Please enter the string you'd like to input:\n";
     std::cin.ignore();
-    getline(std::cin, useri); // We are assuming, in this base program, that the user's input is properly formatted with only Upper Case Roman alphabetical letters.
-    
-    // for(int i = 0; i < useri.size(); i++)
-    // {
-    //     if((useri[i] < 65 || useri[i] > 90) && useri[i] != ' ')
-    //     {
-    //         std::cerr << "Invalid input string\n";
-    //         exit(1);b
-    //     }
-    // }
+    getline(std::cin, useri);
     
     //Part 3: Userinput is taken in, converted into a vector of characters, then converted into an output;
     std::vector<char> userInVec;
@@ -192,7 +202,7 @@ int main()
     for (int i= 0; i < userInVec.size(); i++)
     {
         int tempval = userInVec.at(i);
-        if (+pv3[tempval] != 48) // if the character isn't a 0, replace the input with the pb character
+        if (pv3[tempval] != -1) // if the character isn't a 0, replace the input with the pb character
         {
             userInVec.at(i) = pv3.at(tempval);
         }
@@ -204,9 +214,7 @@ int main()
     for (int i = 0; i < userInVec.size(); i++)
     {
       int icharval = userInVec.at(i);
-      std::cout << userInVec.at(i) << " ";
       rotorcounter++;
-      
       if (r2counter % 128 == 0)
 	{
 	  rotor3 = rotate(1,rotor3);
@@ -229,7 +237,7 @@ int main()
       
       icharval = userInVec.at(i);
       userInVec.at(i) = Reflector.at(icharval);   //Reflector character
-            
+      
       char revRotorChar;
       for (int j = 0; j < rotor3.size(); j++)
 	{
